@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: retro --default, dracula --prefersdark;
+}
+@import "@milkdown/crepe/theme/common/style.css";
+@import "@milkdown/crepe/theme/frame.css";
+[data-theme='dracula'] {
+  @import "@milkdown/crepe/theme/frame-dark.css";
+}
+
+
+.milkdown [data-type="image-block"] {
+  /* 2. Constrain dimensions */
+  max-width: 100%;       /* Never wider than the editor */
+  max-height: 400px;     /* Set your desired hard limit for height */
+  
+  /* 3. Maintain Aspect Ratio (Scaling) */
+  width: auto;           /* Allows width to shrink if height hits max */
+  height: auto;          /* Allows height to shrink if width hits max */
+  
+  /* 4. Formatting extras */
+  object-fit: contain;   /* Ensures the image is never distorted/cropped */
+  display: block;        /* Required for centering */
+  margin: 1rem auto;     /* Centers the image horizontally with some vertical spacing */
+}

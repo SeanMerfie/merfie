@@ -1,0 +1,8 @@
+---
+import Layout from '@layouts/LeftSidebar.astro'
+import CampaignForm from '@components/forms/CampaignForm.svelte'
+---
+
+<Layout title="Create New Campaign">
+    <CampaignForm client:only="svelte" />
+</Layout>

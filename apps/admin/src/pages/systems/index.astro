@@ -1,0 +1,24 @@
+---
+import Layout from '@layouts/LeftSidebar.astro'
+import { actions } from 'astro:actions'
+const { data: systems } = await Astro.callAction(actions.systems.getSystemsWithCampaignCount, {})
+
+---
+
+<Layout title="Systems">
+    <div class="flex gap-4 pb-4 items-center">
+        <h1 class="text-5xl flex-1">Systems</h1>
+        <a class="btn btn-primary" href="systems/new">New System +</a>
+    </div>
+    <hr class="pb-4"/>
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
+        {systems?.map((system) => (
+            <div class="card bg-base-100 w-96 shadow-sm">
+                <div class="card-body items-center">
+                    <a href=`systems/${system.id}`><h2 class="card-title text-2xl">{system.name}</h2></a>
+                    <h2 class="text-6xl center">{system.campaignCount}</h2>
+                </div>
+            </div>
+        ))}
+    </div>
+</Layout>

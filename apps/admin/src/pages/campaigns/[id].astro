@@ -1,0 +1,13 @@
+---
+export const prerender = false
+import Layout from '@layouts/LeftSidebar.astro';
+import CampaignForm from '@components/forms/CampaignForm';
+import { actions } from 'astro:actions';
+
+const { id } = Astro.params;
+const { data: initialData, error } = await Astro.callAction(actions.campaigns.getCampaignById, { id: Number(id) });
+
+---
+<Layout>
+	<CampaignForm initialData={initialData} client:only="react" />
+</Layout>

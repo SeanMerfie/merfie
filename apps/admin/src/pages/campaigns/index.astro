@@ -1,0 +1,21 @@
+---
+export const prerender = false
+import Layout from '@layouts/LeftSidebar.astro'
+import SearchBar from '@components/SearchBar.tsx'
+import ContentList from '@components/ContentList'
+const search = Astro.url.searchParams.get('q') || null;
+const page = Number(Astro.url.searchParams.get('page')) || 1;
+---
+
+<Layout title="Campaigns">
+    <div class="flex gap-4 pb-4 items-center">
+        <h1 class="text-5xl flex-1">Campaigns</h1>
+        <a class="btn btn-primary" href="campaigns/new">New Campaign +</a>
+    </div>
+    <hr class="pb-4" />
+    <SearchBar client:load placeholder="Search campaigns..." />
+    <div class="mt-4">
+        <ContentList client:load contentType="campaign" searchTerm={search} page={page} baseUrl="/campaigns" />
+    </div>
+</Layout>
+
