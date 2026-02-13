@@ -1,4 +1,4 @@
-import { db, contentAlias, images, eq } from '@repo/db';
+import { db, contentAlias, images, eq, and } from '@repo/db';
 
 export const slugify = (text: string): string => {
     return text
@@ -8,15 +8,24 @@ export const slugify = (text: string): string => {
         .replace(/[^a-zA-Z0-9-]/g, '');
 };
 
-export const addContentAlias = async (contentId: number, alias: string) => {
+export const addContentAlias = async (contentId: number, alias: string, contentType: string) => {
     const existingAlias = await db.select().from(contentAlias).where(eq(contentAlias.slug, alias)).limit(1).then(rows => rows[0]);
     if(!existingAlias) {
         await db.insert(contentAlias).values({
             contentId: contentId,
-            slug: alias
+            slug: alias,
+            contentType: contentType
         });
     }
 };
+
+export const checkContentAlias = async (contentId: number, contentType: string, slug: string) => {
+    const existingAlias = await db.select().from(contentAlias).where(and(eq(contentAlias.slug, slug), eq(contentAlias.contentType, contentType))).limit(1).then(rows => rows[0]);
+    if(existingAlias && existingAlias.contentId !== contentId) {
+        return false;
+    }
+    return true;
+}
 
 export const getContentImages = async (contentId: number) => {
     const contentImages = await db.select().from(images).where(eq(images.contentId, contentId));

@@ -22,7 +22,7 @@
         {#if datalist && datalistId}
             <datalist id={datalistId}>
                 {#each datalist as item}
-                    <option value={item} />
+                    <option value={item}></option>
                 {/each}
             </datalist>
         {/if}

@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9f497dbc-a7ad-43c5-b3b1-5739f73d5441",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "88172d09-75f7-4c30-a007-c688af60d2a3",
+  "prevId": "8607fd0c-28aa-4a9d-a9f1-92f4a632f6c2",
   "tables": {
     "content_campaign_details": {
       "name": "content_campaign_details",
@@ -105,7 +105,7 @@
           "name": "content",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "hidden_content": {
@@ -166,7 +166,14 @@
         "slug": {
           "name": "slug",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content_type": {
+          "name": "content_type",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
@@ -194,6 +201,66 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {
+        "content_alias_slug_content_type_pk": {
+          "columns": [
+            "slug",
+            "content_type"
+          ],
+          "name": "content_alias_slug_content_type_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "content_fts": {
+      "name": "content_fts",
+      "columns": {
+        "rowid": {
+          "name": "rowid",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "subtitle": {
+          "name": "subtitle",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "hidden_content": {
+          "name": "hidden_content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

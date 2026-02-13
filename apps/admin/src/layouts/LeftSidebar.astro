@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
-import ThemeToggle from "@components/ThemeToggle.astro";
-import Breadcrumb from "@components/Breadcrumb.astro";
+import ThemeToggle from "@components/ui/ThemeToggle.astro";
+import Breadcrumb from "@components/ui/Breadcrumb.astro";
 const { title = "Astro" } = Astro.props;
 ---
 
@@ -33,10 +33,10 @@ const { title = "Astro" } = Astro.props;
   </head>
   <body>
     <div class="drawer lg:drawer-open">
-      <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+      <input id="my-drawer-4" type="checkbox" class="drawer-toggle" checked />
       <div class="drawer-content">
         <!-- Navbar -->
-        <nav class="navbar w-full bg-base-300">
+        <nav class="navbar w-full bg-base-300 flex">
           <label
             for="my-drawer-4"
             aria-label="open sidebar"
@@ -58,8 +58,11 @@ const { title = "Astro" } = Astro.props;
               ></path></svg
             >
           </label>
-          <div class="px-4">
+          <div class="px-4 flex-1">
             <Breadcrumb />
+          </div>
+          <div class="navbar-end px-4">
+            <ThemeToggle />
           </div>
         </nav>
         <!-- Page content here -->
@@ -78,54 +81,67 @@ const { title = "Astro" } = Astro.props;
         >
           <!-- Sidebar content here -->
           <ul class="menu w-full grow">
-            <!-- List item -->
             <li>
-              <button
-                class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Homepage"
-              >
-                <!-- Home icon -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"
-                  stroke-width="2"
-                  fill="none"
-                  stroke="currentColor"
-                  class="my-1.5 inline-block size-4"
-                  ><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"
-                  ></path><path
-                    d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-                  ></path></svg
-                >
-                <span class="is-drawer-close:hidden">Homepage</span>
-              </button>
+              <a href="/" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Home">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                <span class="is-drawer-close:hidden">Home</span>
+              </a>
             </li>
 
-            <!-- List item -->
             <li>
-              <button
-                class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Settings"
-              >
-                <!-- Settings icon -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"
-                  stroke-width="2"
-                  fill="none"
-                  stroke="currentColor"
-                  class="my-1.5 inline-block size-4"
-                  ><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle
-                    cx="17"
-                    cy="17"
-                    r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg
-                >
-                <span class="is-drawer-close:hidden">Settings</span>
-              </button>
+              <a href="/systems" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Systems">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><circle cx="12" cy="12" r="3"></circle></svg>
+                <span class="is-drawer-close:hidden">Systems</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/campaigns" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Campaigns">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>
+                <span class="is-drawer-close:hidden">Campaigns</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/sessions" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Sessions">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><path d="M8 7V3M16 7V3M3 11h18M5 21h14a2 2 0 0 0 2-2V8H3v11a2 2 0 0 0 2 2z"></path></svg>
+                <span class="is-drawer-close:hidden">Sessions</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/notes" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Notes">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><path d="M21 15V6a2 2 0 0 0-2-2H7l-4 4v7a2 2 0 0 0 2 2h12"></path></svg>
+                <span class="is-drawer-close:hidden">Notes</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/maps" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Maps">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><path d="M20.5 3l-5 2-5-2-6 2v14l6-2 5 2 5-2 6-2V3z"></path></svg>
+                <span class="is-drawer-close:hidden">Maps</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/encounters" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Encounters">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><circle cx="12" cy="8" r="3"></circle><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path></svg>
+                <span class="is-drawer-close:hidden">Encounters</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/miniatures" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Miniatures">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><path d="M12 2l4 4-4 4-4-4z"></path><path d="M6 14v6h12v-6"></path></svg>
+                <span class="is-drawer-close:hidden">Miniatures</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="/stl-files" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="STL Files">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4"><path d="M3 7v10a2 2 0 0 0 2 2h14"></path><path d="M16 3h5v5"></path><path d="M21 8L13 16"></path></svg>
+                <span class="is-drawer-close:hidden">STL Files</span>
+              </a>
             </li>
           </ul>
         </div>

@@ -1,6 +1,7 @@
 import { defineAction } from 'astro:actions';
 import { z } from 'astro/zod';
-import { db, tags, contentTags, images, eq, and, inArray, sql } from '@repo/db';
+import { db, content, tags, contentTags, images, eq, and, inArray, sql } from '@repo/db';
+import { slugify } from './utils';
 
 const contentTypes = ['campaign', 'session', 'note', 'miniature'] as const;
 
@@ -140,6 +141,44 @@ export const contentActions = {
             }));
 
             return { results: resultsWithMeta, totalPages, totalCount, page };
+        }
+    }),
+    createContent: defineAction({
+        accept: 'form',
+        input: z.object({
+            title: z.string().min(1),
+            contentType: z.enum(contentTypes),
+        }), 
+        handler: async ({ title, contentType }) => {
+            console.log('Creating content with title:', title, 'and type:', contentType);
+            const slug = slugify(title);
+            const newContentId = await db.insert(content).values({
+                title,
+                slug,
+                contentType,
+            }).then(result => result.lastInsertRowid as number);
+
+            return {
+                id: newContentId,
+                slug,
+                contentType
+            };
+        }
+    }),
+    getTags: defineAction({
+        accept: 'json',
+        input: z.object({ contentType: z.enum(contentTypes).optional() }),
+        handler: async ({ contentType }) => {
+            if (contentType) {
+                return (await db.select({ id: tags.id, tag: tags.tag })
+                .from(content)
+                .innerJoin(contentTags, eq(contentTags.contentId, content.id))
+                .innerJoin(tags, eq(tags.id, contentTags.tagId))
+                .where(eq(content.contentType, contentType))
+                .orderBy(tags.tag)
+                .groupBy(tags.id)).map(t => ({ id: t.id, tag: t.tag }))
+            }
+            return db.select({ id: tags.id, tag: tags.tag }).from(tags);
         }
     }),
 };

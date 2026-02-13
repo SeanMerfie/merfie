@@ -96,7 +96,7 @@ export const upsertContentTags = async (
             return tag.id;
         })
     );
-
+    console.log('Tag IDs to associate:', tagIds);
     // Insert content_tags relationships
     await db.insert(contentTags).values(
         tagIds.map(tagId => ({

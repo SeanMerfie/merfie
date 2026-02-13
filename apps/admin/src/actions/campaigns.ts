@@ -1,8 +1,8 @@
 import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro/zod';
-import { db, content, campaignDetails, system as systemTable, images, tags, contentTags, eq, or, and, like, exists, inArray, sql } from '@repo/db';
+import { db, content, campaignDetails, systems as systemTable, images, tags, contentTags, eq, or, and, like, exists, inArray, sql, count } from '@repo/db';
 import { SaveOptimizedImage } from './uploads.ts';
-import { slugify, addContentAlias, getContentImages, saveContentImages, replaceContentImages } from './utils';
+import { slugify, addContentAlias, getContentImages, saveContentImages, replaceContentImages, checkContentAlias } from './utils';
 import { upsertContentTags, getContentTags } from './tags.ts';
 
 const formInputSchema = z.object({
@@ -25,54 +25,86 @@ const formInputSchema = z.object({
     ),
 })
 
-export interface FormInputType extends z.ZodType<z.infer<typeof formInputSchema>> {}
+export interface FormInputType extends z.infer<typeof formInputSchema> {}
 
 const hasFile = (file: File | undefined): file is File => {
     return file !== undefined && file.size > 0;
 };
 
+const buildImageMetadata = (formData: FormInputType) => {
+    return {
+        alt: formData.coverImageAlt,
+        focalX: formData.coverImageFocalX,
+        focalY: formData.coverImageFocalY,
+        artist: formData.artistName,
+        artistUrl: formData.artistURL
+    };
+};
+
+const buildContentFields = (formData: z.infer<typeof formInputSchema>, slug: string) => {
+    return {
+        slug: slug,
+        contentType: 'campaign' as const,
+        title: formData.title,
+        subtitle: formData.subtitle,
+        content: formData.content,
+        hiddenContent: formData.hiddenContent,
+    };
+};
+
+const buildCampaignDetailsFields = (formData: z.infer<typeof formInputSchema>) => {
+    return {
+        systemId: formData.systemId,
+        status: formData.status || 'active',
+    };
+};
+
+const handleCoverImageUpload = async (
+    formData: z.infer<typeof formInputSchema>,
+    contentId: number,
+    slug: string,
+    isUpdate: boolean
+): Promise<void> => {
+    if (!hasFile(formData.coverImage)) {
+        return;
+    }
+
+    const imagePaths = await SaveOptimizedImage(
+        formData.coverImage,
+        `campaigns/${slug}`
+    );
+    const metadata = buildImageMetadata(formData);
+
+    if (isUpdate) {
+        await replaceContentImages(imagePaths, contentId, metadata);
+    } else {
+        await saveContentImages(imagePaths, contentId, metadata);
+    }
+};
+
 const insertCampaign = async (formData: z.infer<typeof formInputSchema>) => {
-    let imagePaths: { full: string; content: string; thumbnail: string } | null = null;
-    let slug = slugify(formData.title);
+    const slug = slugify(formData.title);
 
     const existingContent = await db.select().from(content).where(eq(content.slug, slug)).limit(1).then(rows => rows[0]);
     if(existingContent) {
         throw new ActionError({code: 'CONFLICT', message: 'A campaign with this title already exists. Please choose a different title.'});
     }
 
-    if(hasFile(formData.coverImage)) {
-       const imageResult = await SaveOptimizedImage(formData.coverImage, `campaigns/${slug}`);
-       imagePaths = imageResult;
-    }
-
     // Insert into content table
-    const contentResult = await db.insert(content).values({
-        slug: slug,
-        contentType: 'campaign',
-        title: formData.title,
-        subtitle: formData.subtitle,
-        content: formData.content,
-        hiddenContent: formData.hiddenContent,
-    }).returning({ id: content.id, slug: content.slug });
+    const contentResult = await db.insert(content).values(
+        buildContentFields(formData, slug)
+    ).returning({ id: content.id, slug: content.slug });
 
     const contentId = contentResult[0].id;
 
     // Insert campaign-specific details
     await db.insert(campaignDetails).values({
         contentId: contentId,
-        systemId: formData.systemId,
-        status: formData.status || 'active',
+        ...buildCampaignDetailsFields(formData),
     });
 
-    if(imagePaths) {
-        await saveContentImages(imagePaths, contentId, {
-            alt: formData.coverImageAlt,
-            focalX: formData.coverImageFocalX,
-            focalY: formData.coverImageFocalY,
-            artist: formData.artistName,
-            artistUrl: formData.artistURL
-        });
-    }
+    await handleCoverImageUpload(formData, contentId, slug, false);
+
     if(formData.tags) {
         await upsertContentTags(contentId, formData.tags);
     }
@@ -93,37 +125,64 @@ const updateCampaign = async (formData: z.infer<typeof formInputSchema>) => {
         addContentAlias(formData.id, existingCampaign.slug);
     }
 
+    console.log('Updating campaign with ID:', formData.id, 'New slug:', newSlug, 'Title:', formData.title, 'System ID:', formData.systemId, 'Status:', formData.status);
+
     // Update content table
-    await db.update(content).set({
-        title: formData.title,
-        slug: newSlug,
-        subtitle: formData.subtitle,
-        content: formData.content,
-        hiddenContent: formData.hiddenContent,
-    }).where(eq(content.id, formData.id));
+    try {
+        await db.update(content).set(
+            buildContentFields(formData, newSlug)
+        ).where(eq(content.id, formData.id));
+    } catch (error) {
+        console.error('Error updating content:', error);
+        throw new ActionError({code: 'INTERNAL_SERVER_ERROR', message: 'Failed to update campaign content'});
+    }
+
+    console.log('Content updated, now updating campaign details and images if needed');
 
     // Update campaign details
-    await db.update(campaignDetails).set({
-        systemId: formData.systemId,
-        status: formData.status || 'active',
-    }).where(eq(campaignDetails.contentId, formData.id));
+    await db.update(campaignDetails).set(
+        buildCampaignDetailsFields(formData)
+    ).where(eq(campaignDetails.contentId, formData.id));
 
-    if(hasFile(formData.coverImage)) {
-        const imagePaths = await SaveOptimizedImage(formData.coverImage);
-        await replaceContentImages(imagePaths, formData.id, {
-            alt: formData.coverImageAlt,
-            focalX: formData.coverImageFocalX,
-            focalY: formData.coverImageFocalY,
-            artist: formData.artistName,
-            artistUrl: formData.artistURL
-        });
-    }
+    await handleCoverImageUpload(formData, formData.id, newSlug, true);
 
     if(formData.tags) {
         await upsertContentTags(formData.id, formData.tags);
     }
 
     return [{ id: formData.id, slug: newSlug }];
+};
+
+const upsertCampaign = async (formData: z.infer<typeof formInputSchema>) => {
+    const slug = slugify(formData.title);
+    if (formData.id) {
+        const existingCampaign = await db.select().from(content).where(eq(content.id, formData.id)).limit(1).then(rows => rows[0]);
+        if (!existingCampaign) {
+            throw new ActionError({ code: 'NOT_FOUND', message: 'Campaign not found for update' });
+        }
+        if (existingCampaign.slug !== slug) {
+            if (!await checkContentAlias(formData.id, 'campaign', slug)) {
+                throw new ActionError({ code: 'CONFLICT', message: 'A campaign with this slug already exists. Please choose a different title.' });
+            }
+            addContentAlias(formData.id, existingCampaign.slug, existingCampaign.contentType);
+        }
+    }
+
+    const contentResult = await db.insert(content).values(
+        buildContentFields(formData, slug)
+    ).onConflictDoUpdate({
+        target: content.id,
+        set: buildContentFields(formData, slug),
+    }).returning({ id: content.id, slug: content.slug }).then(rows => rows[0]);
+
+    await db.insert(campaignDetails).values({
+        contentId: contentResult.id,
+        ...buildCampaignDetailsFields(formData),
+    })
+    .onConflictDoUpdate({
+        target: campaignDetails.contentId,
+        set: buildCampaignDetailsFields(formData),
+    });
 };
 
 export const campaigns = {
@@ -159,7 +218,7 @@ export const campaigns = {
                 systemId: campaignDetails.systemId,
                 status: campaignDetails.status,
             }).from(content)
-              .innerJoin(campaignDetails, eq(content.id, campaignDetails.contentId))
+              .leftJoin(campaignDetails, eq(content.id, campaignDetails.contentId))
               .where(eq(content.id, input.id))
               .limit(1)
               .then(rows => rows[0]);
@@ -189,4 +248,16 @@ export const campaigns = {
             return campaignsList;
         }
     }),
+    getCampaignCountForSystem: defineAction({
+        accept: 'json',
+        input: z.object({ systemId: z.number().min(0) }),
+        handler: async ({ systemId }) => {
+            return getCampaignCountForSystem(systemId);
+        }
+    }),
+};
+
+export const getCampaignCountForSystem = async (systemId: number): Promise<number> => {
+    const row = await db.select({ count: count().as('count') }).from(campaignDetails).where(eq(campaignDetails.systemId, systemId)).then(r => r[0]);
+    return Number(row?.count ?? 0);
 };

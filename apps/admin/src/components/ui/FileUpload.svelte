@@ -1,5 +1,5 @@
 <script lang="ts">
-    import TextInput from '@components/TextInput.svelte';
+    import TextInput from '@components/ui/TextInput.svelte';
 
     let {imageName, imageAltName, setFocalPoint, focalXName, focalYName, artistNameName, artistURLName, initialImage, initialAlt, initialFocalX, initialFocalY, initialArtistName, initialArtistURL} :
     {imageName: string; imageAltName: string; setFocalPoint?: boolean; focalXName?: string; focalYName?: string; artistNameName?: string; artistURLName?: string; initialImage?: string; initialAlt?: string; initialFocalX?: number | null; initialFocalY?: number | null; initialArtistName?: string | null; initialArtistURL?: string | null} = $props();

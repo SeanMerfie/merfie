@@ -1,0 +1,1 @@
+export type ContentType = 'campaign' | 'session' | 'note' | 'miniature';

@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 import { mmfFiles } from './mmf';
 
@@ -9,7 +9,7 @@ export const content = sqliteTable('content', {
   slug: text('slug').notNull().unique(),
   title: text('title').notNull(),
   subtitle: text('subtitle'),
-  content: text('content').notNull(),
+  content: text('content'),
   hiddenContent: text('hidden_content'),
   published: integer('published', { mode: 'boolean' }).default(false).notNull(),
   createdAt: text('created_at')
@@ -23,7 +23,7 @@ export const content = sqliteTable('content', {
 // Campaign-specific fields
 export const campaignDetails = sqliteTable('content_campaign_details', {
   contentId: integer('content_id').primaryKey().references(() => content.id, { onDelete: 'cascade' }),
-  systemId: integer('system_id').references(() => system.id).notNull(),
+  systemId: integer('system_id').references(() => systems.id).notNull(),
   status: text('status').default('active').notNull(),
 });
 
@@ -48,7 +48,7 @@ export const miniatureDetails = sqliteTable('content_miniature_details', {
 });
 
 // System table (unchanged)
-export const system = sqliteTable('content_system', {
+export const systems = sqliteTable('content_systems', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull().unique(),
   slug: text('slug').notNull().unique(),
@@ -56,8 +56,20 @@ export const system = sqliteTable('content_system', {
 
 // Content alias - no longer needs contentType
 export const contentAlias = sqliteTable('content_alias', {
-  slug: text('slug').primaryKey(),
+  slug: text('slug').notNull(),
+  contentType: text('content_type').notNull(),
   contentId: integer('content_id').references(() => content.id, { onDelete: 'cascade' }).notNull(),
+}, (table) => [
+  primaryKey({ columns: [table.slug, table.contentType] }),
+]);
+
+export const contentFts = sqliteTable('content_fts', {
+  rowid: integer('rowid').primaryKey(),
+  title: text('title'),
+  subtitle: text('subtitle'),
+  content: text('content'),
+  hiddenContent: text('hidden_content'),
+  tags: text('tags'),
 });
 
 // FTS5 Full-Text Search setup SQL

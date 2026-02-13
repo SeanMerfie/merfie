@@ -1,14 +1,10 @@
 ---
 import Layout from '@layouts/LeftSidebar.astro'
-import SystemForm from '@components/forms/SystemForm'
+import PageTitle from '@components/PageTitle.svelte'
+import SystemForm from '@components/forms/SystemForm.svelte'
 ---
 
 <Layout title="New System">
-    <div class="flex gap-4 pb-4 items-center">
-        <h1 class="text-5xl flex-1">Create New System</h1>
-        <a class="btn btn-primary" href="/systems">Back</a>
-    </div>
-    <hr class="pb-4"/>
-    <SystemForm successUrl="/systems" client:only="react"/>
+    <SystemForm client:only="svelte"/>
 </Layout>
 

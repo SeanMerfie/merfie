@@ -1,6 +1,7 @@
 ---
 export const prerender = false
 import Layout from '@layouts/LeftSidebar.astro'
+import SystemForm from '@components/forms/SystemForm.svelte'
 import { actions } from 'astro:actions'
 const id = Number(Astro.params.id)
 if (!id){
@@ -10,13 +11,8 @@ const { data: system } = await Astro.callAction(actions.systems.getSystemById, {
 if(!system){
     return Astro.redirect("/404")
 }
-const { data: campaigns} = await Astro.callAction(actions.campaigns.getCampaignBySystemId, {systemId: id})
 ---
 
-<Layout title="New System">
-    <div class="flex gap-4 pb-4 items-center">
-        <h1 class="text-5xl flex-1">Editing {system?.name}</h1>
-        <a class="btn btn-primary" href="/systems">Back</a>
-    </div>
-    <hr class="pb-4"/>
-</Layout>
+<Layout title={`Editing System: ${system?.name}`}>
+    <SystemForm systemData={system} client:only="svelte"/>
+</Layout>   

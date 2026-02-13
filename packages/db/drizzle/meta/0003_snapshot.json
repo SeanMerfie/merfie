@@ -1,8 +1,8 @@
 {
+  "id": "fc9f75b1-5edb-4ccc-8954-3e5b5442145e",
+  "prevId": "c3e3c881-7786-44f1-b3c7-91b9894bf016",
   "version": "6",
   "dialect": "sqlite",
-  "id": "9f497dbc-a7ad-43c5-b3b1-5739f73d5441",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "content_campaign_details": {
       "name": "content_campaign_details",
@@ -35,28 +35,28 @@
         "content_campaign_details_content_id_content_id_fk": {
           "name": "content_campaign_details_content_id_content_id_fk",
           "tableFrom": "content_campaign_details",
-          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "content_campaign_details_system_id_content_systems_id_fk": {
           "name": "content_campaign_details_system_id_content_systems_id_fk",
           "tableFrom": "content_campaign_details",
-          "tableTo": "content_systems",
           "columnsFrom": [
             "system_id"
           ],
+          "tableTo": "content_systems",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -183,15 +183,15 @@
         "content_alias_content_id_content_id_fk": {
           "name": "content_alias_content_id_content_id_fk",
           "tableFrom": "content_alias",
-          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -228,28 +228,28 @@
         "content_miniature_details_content_id_content_id_fk": {
           "name": "content_miniature_details_content_id_content_id_fk",
           "tableFrom": "content_miniature_details",
-          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "content_miniature_details_mmf_file_id_mmf_files_id_fk": {
           "name": "content_miniature_details_mmf_file_id_mmf_files_id_fk",
           "tableFrom": "content_miniature_details",
-          "tableTo": "mmf_files",
           "columnsFrom": [
             "mmf_file_id"
           ],
+          "tableTo": "mmf_files",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -279,28 +279,28 @@
         "content_note_details_content_id_content_id_fk": {
           "name": "content_note_details_content_id_content_id_fk",
           "tableFrom": "content_note_details",
-          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "content_note_details_campaign_id_content_id_fk": {
           "name": "content_note_details_campaign_id_content_id_fk",
           "tableFrom": "content_note_details",
-          "tableTo": "content",
           "columnsFrom": [
             "campaign_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -337,28 +337,28 @@
         "content_session_details_content_id_content_id_fk": {
           "name": "content_session_details_content_id_content_id_fk",
           "tableFrom": "content_session_details",
-          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "content_session_details_campaign_id_content_id_fk": {
           "name": "content_session_details_campaign_id_content_id_fk",
           "tableFrom": "content_session_details",
-          "tableTo": "content",
           "columnsFrom": [
             "campaign_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -434,28 +434,28 @@
         "content_tags_content_id_content_id_fk": {
           "name": "content_tags_content_id_content_id_fk",
           "tableFrom": "content_tags",
-          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "content_tags_tag_id_tags_id_fk": {
           "name": "content_tags_tag_id_tags_id_fk",
           "tableFrom": "content_tags",
-          "tableTo": "tags",
           "columnsFrom": [
             "tag_id"
           ],
+          "tableTo": "tags",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -549,15 +549,15 @@
         "media_images_content_id_content_id_fk": {
           "name": "media_images_content_id_content_id_fk",
           "tableFrom": "media_images",
-          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
+          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -765,15 +765,15 @@
         "mmf_files_creator_id_mmf_creator_id_fk": {
           "name": "mmf_files_creator_id_mmf_creator_id_fk",
           "tableFrom": "mmf_files",
-          "tableTo": "mmf_creator",
           "columnsFrom": [
             "creator_id"
           ],
+          "tableTo": "mmf_creator",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -803,28 +803,28 @@
         "mmf_files_tags_file_id_mmf_files_id_fk": {
           "name": "mmf_files_tags_file_id_mmf_files_id_fk",
           "tableFrom": "mmf_files_tags",
-          "tableTo": "mmf_files",
           "columnsFrom": [
             "file_id"
           ],
+          "tableTo": "mmf_files",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "mmf_files_tags_tag_id_mmf_tags_id_fk": {
           "name": "mmf_files_tags_tag_id_mmf_tags_id_fk",
           "tableFrom": "mmf_files_tags",
-          "tableTo": "mmf_tags",
           "columnsFrom": [
             "tag_id"
           ],
+          "tableTo": "mmf_tags",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -884,15 +884,15 @@
         "mmf_images_file_id_mmf_files_id_fk": {
           "name": "mmf_images_file_id_mmf_files_id_fk",
           "tableFrom": "mmf_images",
-          "tableTo": "mmf_files",
           "columnsFrom": [
             "file_id"
           ],
+          "tableTo": "mmf_files",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1035,9 +1035,9 @@
   "views": {},
   "enums": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   },
   "internal": {
     "indexes": {}

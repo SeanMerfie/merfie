@@ -4,7 +4,7 @@
     import { listener, listenerCtx } from '@milkdown/plugin-listener';
     import { imageBlockComponent, imageBlockConfig } from '@milkdown/components/image-block';
     import { upload, uploadConfig, type Uploader } from '@milkdown/kit/plugin/upload';
-    import { slash, createSlashView } from '@components/SlashMenu';
+    import { slash, createSlashView } from '@components/ui/SlashMenu';
     import { commonmark } from '@milkdown/kit/preset/commonmark';
     import { gfm } from '@milkdown/kit/preset/gfm';
     import type { Node } from '@milkdown/kit/prose/model';

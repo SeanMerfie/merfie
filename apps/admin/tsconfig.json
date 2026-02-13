@@ -11,7 +11,8 @@
     "baseUrl": ".",
     "paths": {
       "@layouts/*": ["src/layouts/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@types/*": ["src/types/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"

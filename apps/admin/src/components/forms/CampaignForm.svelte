@@ -1,14 +1,14 @@
 <script lang="ts">
-    import Form from '@components/Form.svelte';
-    import PageTitle from '@components/PageTitle.svelte';
-    import LinkButton from '@components/LinkButton.svelte';
-    import Button from '@components/Button.svelte';
-    import TextInput from '@components/TextInput.svelte';
-    import Select from '@components/Select.svelte';
-    import Modal from '@components/Modal.svelte';
-    import FileUpload from '@components/FileUpload.svelte';
-    import MultiSelector from '@components/MultiSelector.svelte';
-    import MilkdownEditor from '@components/MilkdownCrepeEditor.svelte';
+    import Form from '@components/ui/Form.svelte';
+    import PageTitle from '@components/ui/PageTitle.svelte';
+    import LinkButton from '@components/ui/LinkButton.svelte';
+    import Button from '@components/ui/Button.svelte';
+    import TextInput from '@components/ui/TextInput.svelte';
+    import Select from '@components/ui/Select.svelte';
+    import Modal from '@components/ui/Modal.svelte';
+    import FileUpload from '@components/ui/FileUpload.svelte';
+    import MultiSelector from '@components/ui/MultiSelector.svelte';
+    import MilkdownEditor from '@components/ui/MilkdownCrepeEditor.svelte';
     import { actions } from 'astro:actions';
     import { onMount } from 'svelte';
 

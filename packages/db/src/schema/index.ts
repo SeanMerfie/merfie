@@ -1,5 +1,5 @@
 // Schema - Content
-export { content, campaignDetails, sessionDetails, noteDetails, miniatureDetails, system, contentAlias, contentFtsSetup, contentFtsTriggers } from './content';
+export { content, campaignDetails, sessionDetails, noteDetails, miniatureDetails, systems, contentAlias, contentFtsSetup, contentFtsTriggers } from './content';
 
 // Schema - MMF
 export { mmfCreator, mmfFiles, mmfImages, mmfTags, mmfFilesTags } from './mmf';

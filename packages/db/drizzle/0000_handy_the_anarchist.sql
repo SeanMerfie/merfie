@@ -3,7 +3,7 @@ CREATE TABLE `content_campaign_details` (
 	`system_id` integer NOT NULL,
 	`status` text DEFAULT 'active' NOT NULL,
 	FOREIGN KEY (`content_id`) REFERENCES `content`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`system_id`) REFERENCES `content_system`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`system_id`) REFERENCES `content_systems`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `content` (
@@ -27,6 +27,14 @@ CREATE TABLE `content_alias` (
 	FOREIGN KEY (`content_id`) REFERENCES `content`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `content_miniature_details` (
+	`content_id` integer PRIMARY KEY NOT NULL,
+	`mmf_file_id` integer,
+	`date_painted` text,
+	FOREIGN KEY (`content_id`) REFERENCES `content`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`mmf_file_id`) REFERENCES `mmf_files`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
 CREATE TABLE `content_note_details` (
 	`content_id` integer PRIMARY KEY NOT NULL,
 	`campaign_id` integer,
@@ -42,14 +50,14 @@ CREATE TABLE `content_session_details` (
 	FOREIGN KEY (`campaign_id`) REFERENCES `content`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `content_system` (
+CREATE TABLE `content_systems` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`slug` text NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `content_system_name_unique` ON `content_system` (`name`);--> statement-breakpoint
-CREATE UNIQUE INDEX `content_system_slug_unique` ON `content_system` (`slug`);--> statement-breakpoint
+CREATE UNIQUE INDEX `content_systems_name_unique` ON `content_systems` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `content_systems_slug_unique` ON `content_systems` (`slug`);--> statement-breakpoint
 CREATE TABLE `content_tags` (
 	`content_id` integer NOT NULL,
 	`tag_id` integer NOT NULL,
@@ -84,26 +92,6 @@ CREATE TABLE `job_runs` (
 	`started_at` text,
 	`completed_at` text,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE `miniatures` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`name` text NOT NULL,
-	`slug` text NOT NULL,
-	`mmf_file_id` integer,
-	`date_painted` text,
-	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	`updated_at` text,
-	FOREIGN KEY (`mmf_file_id`) REFERENCES `mmf_files`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE UNIQUE INDEX `miniatures_slug_unique` ON `miniatures` (`slug`);--> statement-breakpoint
-CREATE TABLE `miniatures_tags` (
-	`miniature_id` integer NOT NULL,
-	`tag_id` integer NOT NULL,
-	PRIMARY KEY(`miniature_id`, `tag_id`),
-	FOREIGN KEY (`miniature_id`) REFERENCES `miniatures`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`tag_id`) REFERENCES `mmf_tags`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `mmf_creator` (
